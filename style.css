@@ -1,8 +1,15 @@
+body{
+    background-color: #888888;
+}
+
+h1{
+    text-align: center;
+}
+
 .box{
     border: black solid 1px;
     margin: 1rem;
     padding: 1rem;
-
 }
 
 .box:hover{
