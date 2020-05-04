@@ -52,8 +52,11 @@ function FetchMovieInfo(movie) {
     //We replace white space with + allow the string to be used on url;
     let titleString = movie.title.replace(" ", "+");
     let url = "http://www.omdbapi.com/?apikey=c6d68ef6&t=" + titleString;
-
-    fetch(url)
+    
+    //Proxy url to enable CORS on publishing platform. (fetch(proxyUrl+url))
+    let proxyUrl = "https://cors-anywhere.herokuapp.com/";
+    
+    fetch(proxyUrl+url)
         //When the promise is resolved we extract the JSON part of the response object
         .then(response => {
             return response.json();
