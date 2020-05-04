@@ -56,7 +56,7 @@ function FetchMovieInfo(movie) {
     //Proxy url to enable CORS on publishing platform. (fetch(proxyUrl+url))
     let proxyUrl = "https://cors-anywhere.herokuapp.com/";
 
-    fetch(url)
+    fetch(proxyUrl + url)
         //When the promise is resolved we extract the JSON part of the response object
         .then(response => {
             return response.json();
