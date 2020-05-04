@@ -52,11 +52,11 @@ function FetchMovieInfo(movie) {
     //We replace white space with + allow the string to be used on url;
     let titleString = movie.title.replace(" ", "+");
     let url = "http://www.omdbapi.com/?apikey=c6d68ef6&t=" + titleString;
-    
+
     //Proxy url to enable CORS on publishing platform. (fetch(proxyUrl+url))
     let proxyUrl = "https://cors-anywhere.herokuapp.com/";
-    
-    fetch(proxyUrl+url)
+
+    fetch(url)
         //When the promise is resolved we extract the JSON part of the response object
         .then(response => {
             return response.json();
@@ -76,6 +76,10 @@ function FetchMovieInfo(movie) {
             let rated = document.createElement("p");
             rated.innerText = "Age of Movie: " + data.Rated;
 
+            //Create p element and set the runtime of the movie
+            let runtime = document.createElement("p");
+            runtime.innerText = "Runtime: " + data.Runtime;
+
             //Create p element and set the plot
             let plot = document.createElement("p");
             plot.innerText = data.Plot;
@@ -91,6 +95,7 @@ function FetchMovieInfo(movie) {
             movieBox.appendChild(image);
             movieBox.appendChild(imdbRating);
             movieBox.appendChild(rated);
+            movieBox.appendChild(runtime);
             movieBox.appendChild(plot);
             movieBox.appendChild(trailer);
         })
