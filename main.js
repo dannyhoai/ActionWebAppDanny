@@ -31,25 +31,26 @@ function InsertCards() {
         return 0;
     });
 
-    //Going through each movie in the sorted array, create a div element and attach it to the div "box-content" element
+    //Going through each movie in the sorted array, create a div element with a header and attach it to the div "box-content" element
     moviesSorted.forEach(function (movie) {
         let appContent = document.getElementById("main-content");
 
-        let box = document.createElement("div");
-        box.setAttribute("class", "card");
-        box.setAttribute("id", "" + movie.title);
+        let card = document.createElement("div");
+        card.setAttribute("class", "card");
+        card.setAttribute("id", "" + movie.title);
 
         let title = document.createElement("h2");
         title.innerText = movie.title;
 
-        box.appendChild(title);
-        appContent.appendChild(box);
+        card.appendChild(title);
+        appContent.appendChild(card);
     });
 }
 
 //Fetch data from api and insert it their correct card boxes
 function FetchMovieInfo(movie) {
-    let movieBox = document.getElementById("" + movie.title);
+    //Finds the card of the movie and set it in a variable for future reference
+    let movieCard = document.getElementById("" + movie.title);
 
     //Replacing white space with + allow the string to be used on url;
     let titleString = movie.title.replace(" ", "+");
@@ -102,10 +103,10 @@ function FetchMovieInfo(movie) {
             trailer.setAttribute("title", "" + movie.title)
 
             //Add all the elements to their movie box
-            movieBox.appendChild(image);
-            movieBox.appendChild(ulShortInfo);
-            movieBox.appendChild(plot);
-            movieBox.appendChild(trailer);
+            movieCard.appendChild(image);
+            movieCard.appendChild(ulShortInfo);
+            movieCard.appendChild(plot);
+            movieCard.appendChild(trailer);
         })
         //Error Handling
         .catch(err => {
