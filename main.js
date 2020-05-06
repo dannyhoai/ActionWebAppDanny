@@ -67,15 +67,16 @@ function FetchMovieInfo(movie) {
         .then(data => {
             //Create image element and set the source content
             let image = document.createElement("img");
-            image.classList.add("poster")
+            image.classList.add("poster");
             image.setAttribute("src","" + data.Poster);
+            image.setAttribute("alt", "" + data.Title);
 
             //Create ul element
             let ulShortInfo = document.createElement("ul");
 
             //Create li element and set rating from Imdb, runtime and the age of the movie allowed
             let imdbRating = document.createElement("li");
-            imdbRating.innerText = "ImdbRating: " + data.imdbRating;
+            imdbRating.innerText = "ImdbRating: " + data.imdbRating + "/10";
 
             let rated = document.createElement("li");
             rated.innerText = "Age of Movie: " + data.Rated;
@@ -98,6 +99,7 @@ function FetchMovieInfo(movie) {
             trailer.setAttribute("height", "200");
             trailer.setAttribute("allowfullscreen", "allowfullscreen");
             trailer.setAttribute("src", "" + youtube.generateEmbedUrl(movie.youtubeUrl));
+            trailer.setAttribute("title", "" + movie.title)
 
             //Add all the elements to their movie box
             movieBox.appendChild(image);
