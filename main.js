@@ -56,7 +56,9 @@ function FetchMovieInfo(movie) {
     let titleString = movie.title.replace(" ", "+");
     let url = "http://www.omdbapi.com/?apikey=c6d68ef6&t=" + titleString;
 
-    //Proxy url to enable CORS on publishing platform. (fetch(proxyUrl+url))
+    // Proxy url to enable CORS on publishing platform. (fetch(proxyUrl+url))
+    // if cannot fetch then the limited amount of use on the proxy is reached
+    // if local change to fetch(url) to see it work
     let proxyUrl = "https://cors-anywhere.herokuapp.com/";
 
     fetch(proxyUrl+url)
