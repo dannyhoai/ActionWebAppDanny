@@ -1,5 +1,5 @@
 "use strict";
-//Defining JSON object with action movie data
+//Defining our action movie data
 const jsonData = {
     "movies": [
         {"title": "Die Hard", "youtubeUrl": "https://www.youtube.com/watch?v=QIOX44m8ktc"},
@@ -7,15 +7,17 @@ const jsonData = {
         {"title": "The Matrix", "youtubeUrl": "https://www.youtube.com/watch?v=m8e-FF8MsqU"},
         {"title": "The Terminator", "youtubeUrl": "https://www.youtube.com/watch?v=k64P4l2Wmeg"},
         {"title": "The Mummy", "youtubeUrl": "https://www.youtube.com/watch?v=h3ptPtxWJRs"},
-        {"title": "Man of Steel", "youtubeUrl": "https://www.youtube.com/watch?v=wArmHSPIvlQ"}
+        {"title": "Man of Steel", "youtubeUrl": "https://www.youtube.com/watch?v=wArmHSPIvlQ"},
+        {"title": "Monty Python and the Holy Grail", "youtubeUrl" : "https://www.youtube.com/watch?v=urRkGvhXc8w"}
     ]
 };
 
 //Finding the root div element
 const app = document.getElementById('root');
 
-function InsertBoxes() {
-    //Initiate variable for sorted array after Title
+//Insert Card boxes on the page
+function InsertCards() {
+    //Initiate variable for sorted array after movie titles in alphabetical order
     let moviesSorted = jsonData.movies.sort(function(a, b) {
         let titleA = a.title.toUpperCase(); // ignore upper and lowercase
         let titleB = b.title.toUpperCase(); // ignore upper and lowercase
@@ -25,20 +27,19 @@ function InsertBoxes() {
         if (titleA > titleB) {
             return 1;
         }
-
         //Equal
         return 0;
     });
 
-    //Going through each movie in the JSON array, create a div element and attach it to the div "box-content" element
+    //Going through each movie in the sorted array, create a div element and attach it to the div "box-content" element
     moviesSorted.forEach(function (movie) {
-        let appContent = document.getElementById("box-content");
+        let appContent = document.getElementById("main-content");
 
         let box = document.createElement("div");
-        box.setAttribute("class", "box");
+        box.setAttribute("class", "card");
         box.setAttribute("id", "" + movie.title);
 
-        let title = document.createElement("h1");
+        let title = document.createElement("h2");
         title.innerText = movie.title;
 
         box.appendChild(title);
@@ -46,17 +47,18 @@ function InsertBoxes() {
     });
 }
 
+//Fetch data from api and insert it their correct card boxes
 function FetchMovieInfo(movie) {
     let movieBox = document.getElementById("" + movie.title);
 
-    //We replace white space with + allow the string to be used on url;
+    //Replacing white space with + allow the string to be used on url;
     let titleString = movie.title.replace(" ", "+");
     let url = "http://www.omdbapi.com/?apikey=c6d68ef6&t=" + titleString;
 
     //Proxy url to enable CORS on publishing platform. (fetch(proxyUrl+url))
     let proxyUrl = "https://cors-anywhere.herokuapp.com/";
 
-    fetch(proxyUrl + url)
+    fetch(proxyUrl+url)
         //When the promise is resolved we extract the JSON part of the response object
         .then(response => {
             return response.json();
@@ -68,40 +70,44 @@ function FetchMovieInfo(movie) {
             image.classList.add("poster")
             image.setAttribute("src","" + data.Poster);
 
-            //Create p element and set rating from Imdb
-            let imdbRating = document.createElement("p");
+            //Create ul element
+            let ulShortInfo = document.createElement("ul");
+
+            //Create li element and set rating from Imdb, runtime and the age of the movie allowed
+            let imdbRating = document.createElement("li");
             imdbRating.innerText = "ImdbRating: " + data.imdbRating;
 
-            //Create p element and set the age of the movie allowed to watch it
-            let rated = document.createElement("p");
+            let rated = document.createElement("li");
             rated.innerText = "Age of Movie: " + data.Rated;
 
-            //Create p element and set the runtime of the movie
-            let runtime = document.createElement("p");
+            let runtime = document.createElement("li");
             runtime.innerText = "Runtime: " + data.Runtime;
+
+            //Adding the created lis in the ul
+            ulShortInfo.appendChild(imdbRating);
+            ulShortInfo.appendChild(rated);
+            ulShortInfo.appendChild(runtime);
 
             //Create p element and set the plot
             let plot = document.createElement("p");
             plot.innerText = data.Plot;
 
-            //Create iframe element, set the width, length, allow fullscreen and set the source to the youtube video trailer for the movie
+            //Create iframe element, set the width, length, the youtube trailer source and allow fullscreen
             let trailer = document.createElement("iframe");
             trailer.setAttribute("width", "400");
             trailer.setAttribute("height", "200");
             trailer.setAttribute("allowfullscreen", "allowfullscreen");
             trailer.setAttribute("src", "" + youtube.generateEmbedUrl(movie.youtubeUrl));
 
-            //Attach all the element to their correct movie box
+            //Add all the elements to their movie box
             movieBox.appendChild(image);
-            movieBox.appendChild(imdbRating);
-            movieBox.appendChild(rated);
-            movieBox.appendChild(runtime);
+            movieBox.appendChild(ulShortInfo);
             movieBox.appendChild(plot);
             movieBox.appendChild(trailer);
         })
         //Error Handling
         .catch(err => {
-            // Do something for an error here
+            // Add error message on the page in the root div element
             const errorMessage = document.createElement('marquee');
             errorMessage.textContent = `Gah, it's not working!`;
             app.appendChild(errorMessage);
@@ -130,29 +136,17 @@ let youtube = {
     /*
         Expects an argument that is either a youtube Url or a Id, and returns back the embed Url for that video
     */
-
     generateEmbedUrl: function (videoIdOrUrl) {
         return 'https://www.youtube.com/embed/' + youtube.getIdFromUrl(videoIdOrUrl);
     }
 }
 
-InsertBoxes();
+//Invoke the functions
+InsertCards();
 jsonData.movies.forEach(movie =>{
    FetchMovieInfo(movie);
-   //EmbedTrailers(movie);
 });
 
-
-function EmbedTrailers(movie){
-    let movieBox = document.getElementById("" + movie.title);
-
-    //Create iframe element and set the source to the youtube video trailer for the movie
-    let trailer = document.createElement("iframe");
-    trailer.setAttribute("width", "400");
-    trailer.setAttribute("height", "200");
-    trailer.setAttribute("src", "" + youtube.generateEmbedUrl(movie.youtubeUrl));
-    movieBox.appendChild(trailer);
-}
 
 
 
