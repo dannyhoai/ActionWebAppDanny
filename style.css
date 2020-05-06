@@ -1,15 +1,20 @@
+body{
+    background-color: white;
+}
+
+@media screen and (min-width: 600px){
+    body{
+        /* Bright gray*/
+        background-color: #E9EBEE;
+    }
+}
+
 #main-content{
     display: grid;
     /*
         tells the browser to decide the amount of columns how many to fit with min 300px width max 1fr
-        give ability to not use media queries for breakpoint on example mobile first
     */
     grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-}
-
-body{
-    /* Bright gray*/
-    background-color: #E9EBEE;
 }
 
 h1,h2{
